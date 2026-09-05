@@ -305,7 +305,6 @@ After launching the application, the **Library Management System GUI** should ap
 
 > **Note:** When using Visual Studio Code with the Java Extension Pack, you do not need to manually run the `javac` and `java` commands.
 
----
 
 # 🔐 Default Credentials
 
@@ -327,7 +326,6 @@ After launching the application, the **Library Management System GUI** should ap
 |---|---|
 | `M002` | `member456` |
 
----
 
 # 🧪 Testing Procedure
 
@@ -346,7 +344,6 @@ After launching the application, the **Library Management System GUI** should ap
 
 The Librarian dashboard should be displayed.
 
----
 
 ## Test 2 — Failed Login as Librarian
 
@@ -360,7 +357,6 @@ The Librarian dashboard should be displayed.
 
 An invalid login message should be displayed.
 
----
 
 ## Test 3 — View Books
 
@@ -380,7 +376,6 @@ The table should display information about each book, including:
 - Category
 - Availability Status
 
----
 
 ## Test 4 — Add Book
 
@@ -399,7 +394,6 @@ The table should display information about each book, including:
 
 The book should be added to the book list.
 
----
 
 ## Test 5 — Add Book with Duplicate ID
 
@@ -411,7 +405,6 @@ Try to add a book with an existing Book ID.
 
 The book should not be added, and an appropriate message should be displayed.
 
----
 
 ## Test 6 — Register Member
 
@@ -430,7 +423,6 @@ The book should not be added, and an appropriate message should be displayed.
 
 The new member should be successfully registered.
 
----
 
 ## Test 7 — Login as Member
 
@@ -447,7 +439,6 @@ The new member should be successfully registered.
 
 The Member dashboard should be displayed.
 
----
 
 ## Test 8 — Search Book
 
@@ -466,7 +457,6 @@ The Member dashboard should be displayed.
 
 Only books matching the search query should be displayed.
 
----
 
 ## Test 9 — Issue Book
 
@@ -487,7 +477,7 @@ The book status should change to:
 ISSUED
 ```
 
----
+
 
 ## Test 10 — Issue More Than 3 Books
 
@@ -499,7 +489,7 @@ Issue a total of 3 books as Member 1 and attempt to issue a 4th book.
 
 The 4th book should not be issued, and an appropriate message should be displayed.
 
----
+
 
 ## Test 11 — Return / Check-in Issued Book
 
@@ -519,7 +509,6 @@ The status of the returned book should change to:
 AVAILABLE
 ```
 
----
 
 ## Test 12 — Remove Book
 
@@ -537,7 +526,6 @@ AVAILABLE
 - Available books that are removed should no longer appear in the All Books table.
 - Issued books should remain in the Issued Books table until they are returned.
 
----
 
 ## Test 13 — Persist Data
 
