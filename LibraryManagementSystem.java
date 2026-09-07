@@ -1,18 +1,7 @@
 /*
- * ============================================================
  *  LIBRARY MANAGEMENT SYSTEM  (Swing GUI Edition - Interactive UI)
- *  CSE2006 - Programming in Java  |  2nd Year B.Tech Project
- * ============================================================
- *
- *  HOW TO RUN (no terminal commands needed):
- *      Open this file in VS Code (with the "Extension Pack for
- *      Java" installed) and click the "Run" button that appears
- *      above the main() method, or press F5 / Ctrl+F5.
- *      VS Code compiles and launches the app for you - a window
- *      will pop up. You never need to type javac / java yourself.
  *
  *  DEFAULT LOGIN CREDENTIALS
- *  --------------------------------------------------
  *  Librarian:
  *      Username: admin
  *      Password: admin123
@@ -24,17 +13,6 @@
  *  Member 2:
  *      ID: M002
  *      Password: member456
- *  --------------------------------------------------
- *
- *  Data is auto-saved to text files (books.txt, members.txt,
- *  issues.txt) in the same folder, and reloaded automatically
- *  the next time the program starts.
- *
- *  NOTE: All original functionality/logic is UNCHANGED. Only the
- *  Swing UI layer was upgraded: bigger fonts, colored theme,
- *  rounded hover-reactive buttons, focus-glow text fields,
- *  zebra-striped tables and color-coded book status badges.
- * ============================================================
  */
 
 import java.awt.*;
@@ -50,17 +28,10 @@ import java.util.List;
 import javax.swing.*;
 import javax.swing.table.*;
 
-/* ================================================================
- *  ENUM  -  demonstrates the Enum concept from the syllabus
- * ================================================================ */
 enum BookStatus {
     AVAILABLE,
     ISSUED
 }
-
-/* ================================================================
- *  CUSTOM EXCEPTIONS  -  demonstrate custom Exception Handling
- * ================================================================ */
 class BookNotFoundException extends Exception {
     public BookNotFoundException(String message) { super(message); }
 }
@@ -93,10 +64,7 @@ class ReturnNotAllowedException extends Exception {
     public ReturnNotAllowedException(String message) { super(message); }
 }
 
-/* ================================================================
- *  ABSTRACT CLASS  -  User
- *  Demonstrates: Abstraction, Encapsulation, Inheritance base
- * ================================================================ */
+
 abstract class User {
     // private fields -> Encapsulation
     private String id;
@@ -127,9 +95,6 @@ abstract class User {
     public abstract void displayProfile();
 }
 
-/* ================================================================
- *  Librarian  -  extends User (Inheritance)
- * ================================================================ */
 class Librarian extends User {
     public Librarian(String id, String name, String password) {
         super(id, name, password);
@@ -149,9 +114,6 @@ class Librarian extends User {
     }
 }
 
-/* ================================================================
- *  Member  -  extends User (Inheritance)
- * ================================================================ */
 class Member extends User {
     private String department;
     private List<String> issuedBookIds;   // Collections Framework usage
@@ -230,9 +192,6 @@ class Book {
     }
 }
 
-/* ================================================================
- *  IssueRecord class  -  represents a Book <-> Member relationship
- * ================================================================ */
 class IssueRecord {
     private String bookId;
     private String memberId;
@@ -255,10 +214,7 @@ class IssueRecord {
     }
 }
 
-/* ================================================================
- *  INTERFACE  -  LibraryOperations
- *  Demonstrates the Interface concept from the syllabus
- * ================================================================ */
+
 interface LibraryOperations {
     void addBook(String bookId, String title, String author, String category) throws DuplicateBookException;
     void removeBook(String bookId) throws BookNotFoundException, BookNotAvailableException;
@@ -267,12 +223,7 @@ interface LibraryOperations {
     void returnBook(String bookId, String memberId) throws BookNotFoundException, MemberNotFoundException, ReturnNotAllowedException;
 }
 
-/* ================================================================
- *  Library class  -  implements LibraryOperations
- *  Central manager for books, members and issue records.
- *  Uses File I/O for persistence and synchronization for
- *  thread-safe updates to shared collections.
- * ================================================================ */
+
 class Library implements LibraryOperations {
 
     private ArrayList<Book> books;
@@ -317,10 +268,7 @@ class Library implements LibraryOperations {
         return findMemberById(memberId) != null;
     }
 
-    /* ---------- LibraryOperations implementation ---------- */
 
-    // synchronized: protects the shared 'books' collection when
-    // a background audit thread might be reading it at the same time.
     @Override
     public synchronized void addBook(String bookId, String title, String author, String category)
             throws DuplicateBookException {
@@ -432,12 +380,6 @@ class Library implements LibraryOperations {
         saveMembers();
     }
 
-    /* ---------- Multithreading + Synchronization ----------
-     * A lightweight background thread simulates an audit-log /
-     * notification operation after issue or return actions.
-     * It only reads shared state after the synchronized library
-     * method has already finished updating it, keeping things safe.
-     */
     private void runAuditNotification(String message) {
         Runnable auditTask = () -> {
             try {
@@ -455,8 +397,6 @@ class Library implements LibraryOperations {
         } catch (InterruptedException ignored) {
         }
     }
-
-    /* =================== FILE I/O (PERSISTENCE) =================== */
 
     public synchronized void saveBooks() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(BOOKS_FILE))) {
@@ -590,10 +530,6 @@ class Library implements LibraryOperations {
     }
 }
 
-/* ================================================================
- *  ZebraCellRenderer  -  alternating row colors + comfy padding
- *  for a more modern, readable table look.
- * ================================================================ */
 class ZebraCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -608,10 +544,6 @@ class ZebraCellRenderer extends DefaultTableCellRenderer {
     }
 }
 
-/* ================================================================
- *  StatusCellRenderer  -  colored AVAILABLE / ISSUED badge text
- *  in the book status column, for quick at-a-glance scanning.
- * ================================================================ */
 class StatusCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected,
@@ -638,13 +570,6 @@ class StatusCellRenderer extends DefaultTableCellRenderer {
     }
 }
 
-/* ================================================================
- *  MAIN CLASS  -  Swing GUI, login flow and dashboards
- *  This is the ONLY public class in the file.
- *  Run it straight from VS Code (Run button / F5) - a window
- *  opens and everything is done with clicks and forms instead
- *  of typing into the terminal.
- * ================================================================ */
 public class LibraryManagementSystem {
 
     private static final Library library = new Library();
@@ -677,11 +602,7 @@ public class LibraryManagementSystem {
     private static JLabel profileIdLabel, profileNameLabel, profileDeptLabel, profileIssuedLabel, profileMaxLabel;
     private static Member currentMember;
 
-    /* ===================================================================
-     *  THEME  -  colors and fonts used across the whole UI. Centralizing
-     *  these here is what makes the interface feel consistent, and it
-     *  makes the "font size little more" bump apply everywhere at once.
-     * =================================================================== */
+
     private static final Color COLOR_BG          = new Color(244, 247, 252);
     private static final Color COLOR_CARD        = Color.WHITE;
     private static final Color COLOR_PRIMARY     = new Color(37, 99, 235);   // blue - librarian / primary actions
@@ -713,7 +634,6 @@ public class LibraryManagementSystem {
         SwingUtilities.invokeLater(LibraryManagementSystem::createAndShowGUI);
     }
 
-    /* ============================ FRAME SETUP ============================ */
 
     private static void createAndShowGUI() {
         try {
@@ -792,7 +712,6 @@ public class LibraryManagementSystem {
         return b;
     }
 
-    /** Text field with a soft border that glows blue when focused. */
     private static void styleTextField(JTextField field) {
         field.setFont(FONT_LABEL);
         field.setForeground(COLOR_TEXT);
@@ -859,7 +778,6 @@ public class LibraryManagementSystem {
         return wrap;
     }
 
-    /* ============================ WELCOME PANEL ============================ */
 
     private static JPanel buildWelcomePanel() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -921,7 +839,6 @@ public class LibraryManagementSystem {
         return b;
     }
 
-    /* ============================ LOGIN PANELS ============================ */
 
     private static JPanel buildLibrarianLoginPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
@@ -1077,7 +994,6 @@ public class LibraryManagementSystem {
         return panel;
     }
 
-    /* ============================ LIBRARIAN DASHBOARD ============================ */
 
     private static JPanel buildLibrarianDashboard() {
         JPanel panel = new JPanel(new BorderLayout());
@@ -1406,7 +1322,6 @@ public class LibraryManagementSystem {
         return panel;
     }
 
-    /* ============================ REFRESH HELPERS ============================ */
 
     private static void refreshLibrarianTables() {
         refreshBooksModel(libBookModel, library.getBooks());
@@ -1468,7 +1383,6 @@ public class LibraryManagementSystem {
         }
     }
 
-    /* ============================ UI HELPERS ============================ */
 
     private static DefaultTableModel readOnlyModel(String[] columns) {
         return new DefaultTableModel(columns, 0) {
@@ -1479,7 +1393,6 @@ public class LibraryManagementSystem {
         };
     }
 
-    /** Shows a small OK/Cancel form dialog and returns the entered values, or null if cancelled. */
     private static String[] promptForFields(String title, String... fieldLabels) {
         JPanel panel = new JPanel(new GridLayout(fieldLabels.length, 2, 10, 10));
         panel.setBackground(Color.WHITE);
@@ -1503,7 +1416,6 @@ public class LibraryManagementSystem {
         return values;
     }
 
-    /** Returns the value in the given column of the selected table row, or prompts the user for it. */
     private static String getSelectedOrPrompt(JTable table, int column, String promptMessage) {
         int row = table.getSelectedRow();
         if (row >= 0) {
@@ -1527,29 +1439,3 @@ public class LibraryManagementSystem {
         JOptionPane.showMessageDialog(frame, message, "Info", JOptionPane.INFORMATION_MESSAGE);
     }
 }
-
-/*
- * ============================================================
- *  NOTE ON JDBC (for viva explanation only - not compiled here)
- * ============================================================
- * The Library class currently persists data using File I/O
- * (books.txt, members.txt, issues.txt). If this project were
- * extended to use a real database via JDBC, the same class
- * design would still work:
- *
- *   - addBook/removeBook/searchBook/issueBook/returnBook would
- *     internally execute SQL statements (INSERT, DELETE,
- *     SELECT, UPDATE) instead of manipulating ArrayLists.
- *   - A Connection would be opened using DriverManager.getConnection(...)
- *     with a JDBC URL, username and password.
- *   - PreparedStatement objects would be used to safely execute
- *     parameterized SQL queries (avoiding SQL injection).
- *   - ResultSet would be iterated to rebuild Book/Member/IssueRecord
- *     objects from database rows.
- *
- * Because this project must run as a single file with zero
- * external dependencies, the JDBC driver JAR is intentionally
- * NOT included, and File I/O + Collections are used instead to
- * fulfill the same CRUD responsibilities.
- * ============================================================
- */
